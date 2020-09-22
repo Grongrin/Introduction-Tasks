@@ -1,0 +1,77 @@
+<configuration>
+
+    <timestamp key="byDay" datePattern="yyyyMMdd"/>
+
+    <appender name="INFO_TO_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>myApp-INFO-${byDay}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+
+        <encoder>
+            <pattern>%d{YYYY:MM:dd HH:mm:ss} [%level] [%thread] %logger{36} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="WARN_TO_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>myApp-WARN-${byDay}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <encoder>
+            <pattern>%d{YYYY:MM:dd HH:mm:ss} [%level] [%thread] %logger{36} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_TO_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>myApp-ERROR-${byDay}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <encoder>
+            <pattern>%d{YYYY:MM:dd HH:mm:ss} [%marker%level] [%thread] %logger{36} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>myApp-${byDay}.log</file>
+
+        <encoder>
+            <pattern>%d{YYYY:MM:dd HH:mm:ss} [%level] [%thread] %logger{36} [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <logger name="test.Foo" level="DEBUG"/>
+
+    <logger name="test" level="INFO">
+        <appender-ref ref="INFO_TO_FILE"/>
+        <appender-ref ref="WARN_TO_FILE"/>
+        <appender-ref ref="ERROR_TO_FILE"/>
+    </logger>
+
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
